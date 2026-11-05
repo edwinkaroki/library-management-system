@@ -64,58 +64,55 @@ Modeling this library catalog in Prisma with PostgreSQL highlights key philosoph
 
 ## 🚀 Setup, Migration & Seeding Instructions
 
-### 1. Environment Configuration
+### Neon PostgreSQL Project
 
-Copy the example environment configuration into `api/.env`:
+This repository is linked to the Neon project [`library-management-system`](https://console.neon.tech/app/projects/nameless-surf-47683720/) in AWS Europe (Frankfurt). The initial migration has been applied to its `main` branch, and the seed data has been verified: **5 genres, 19 books, 3 users, and 2 reviews**.
 
-```bash
-cp api/.env.example api/.env
+Neon connection strings are credentials. Keep them in ignored local environment files; never commit them or paste them into source code.
+
+### 1. Configure the Database URL
+
+If you have the Neon CLI linked to this repository, pull the linked branch's environment directly into the API's ignored `.env` file from the repository root:
+
+```powershell
+neon env pull --file api/.env
 ```
 
-Edit `api/.env` and supply your PostgreSQL connection string:
+Alternatively, copy the example and replace its placeholder with your PostgreSQL connection string:
 
-```env
-DATABASE_URL="postgresql://<user>:<password>@<host>:<port>/<database>?schema=public"
+```powershell
+Copy-Item api\.env.example api\.env
 ```
 
-### 2. Run Database Migrations
+For a fresh local checkout using Neon CLI, link the repository to the project and pull its variables:
 
-The initial migration is checked in under `api/prisma/migrations`. After configuring
-`api/.env` with the hosted PostgreSQL connection string, apply pending migrations:
+```powershell
+neon link --project-id nameless-surf-47683720 -y
+neon env pull --file api/.env
+```
 
-```bash
-cd api
+### 2. Apply Migrations and Seed Data
+
+Run these commands from the `api` directory:
+
+```powershell
 npx prisma migrate deploy
+npx prisma db seed
 ```
 
-For local schema development, create additional migrations with
-`npx prisma migrate dev --name <migration-name>` against a development database.
+The initial migration is checked in at `api/prisma/migrations`. The seed script is safe to rerun: it upserts genres, books, and users, and avoids adding duplicate sample reviews.
 
-### 3. Generate Prisma Client
+For local schema development, create additional migrations against a development database with `npx prisma migrate dev --name <migration-name>`.
 
-```bash
+### 3. Generate the Prisma Client
+
+```powershell
 npx prisma generate
 ```
 
-### 4. Run the Seed Script
+### 4. Build & Test
 
-The seed script (`api/prisma/seed.ts`) populates the database with:
-- **5 distinct genres** (`Fiction`, `Science Fiction`, `Mystery & Thriller`, `Non-Fiction`, `Fantasy`)
-- **3 default users** (1 Librarian and 2 Patrons)
-- **19 books** distributed across the genres
-- **Sample patron reviews**
-
-To run the seed script:
-
-```bash
-cd api
-npx prisma db seed # or: npm run prisma:seed
-```
-
-### 5. Build & Test
-
-```bash
-cd api
+```powershell
 npm run build
 npm run test
 npm run lint
