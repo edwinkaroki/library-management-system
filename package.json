@@ -1,0 +1,18 @@
+{
+  "name": "library-management-system",
+  "private": true,
+  "scripts": {
+    "start:dev": "concurrently -k -n API,WEB \"npm --prefix api run start:dev\" \"npm --prefix client run dev -- --host 0.0.0.0\"",
+    "start": "npm --prefix api run start",
+    "build": "npm --prefix api run build",
+    "test": "npm --prefix api run test",
+    "lint": "npm --prefix api run lint"
+  },
+  "dependencies": {
+    "@neon/config": "^1.11.3",
+    "@neon/env": "^1.6.15"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}
