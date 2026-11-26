@@ -7,6 +7,8 @@ import { GenresModule } from './genres/genres.module.js';
 import { BooksModule } from './books/books.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
+import { BorrowRequestsModule } from './borrow-requests/borrow-requests.module.js';
+import { BookingsModule } from './bookings/bookings.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -25,8 +27,11 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     BooksModule,
     AuthModule,
     UsersModule,
+    BorrowRequestsModule,
+    BookingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
+

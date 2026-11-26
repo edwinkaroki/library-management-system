@@ -82,6 +82,16 @@ async function main() {
   });
   console.log('Created/verified users (1 Librarian, 2 Patrons).');
 
+  const spacesData = [
+    { name: 'Quiet study room', description: 'A calm room for focused individual work.', capacity: 2 },
+    { name: 'Collaboration room', description: 'A shared room for group study and project work.', capacity: 8 },
+    { name: 'Community table', description: 'An open table for casual study and reading.', capacity: 6 },
+  ];
+  for (const space of spacesData) {
+    await prisma.space.upsert({ where: { name: space.name }, update: space, create: space });
+  }
+  console.log(`Created/verified ${spacesData.length} library spaces.`);
+
   // Seed Books (At least 15 books distributed across genres)
   const booksData = [
     // Fiction
@@ -347,3 +357,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
