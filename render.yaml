@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: library-management-api
+    runtime: node
+    rootDir: api
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "24"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FINE_RATE_PER_DAY
+        value: "25"
