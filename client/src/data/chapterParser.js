@@ -2,9 +2,13 @@ const ROMAN = '[IVXLCDM]+';
 
 function headingPattern(slug) {
   if (slug === 'meditations') return new RegExp(`^BOOK\\s+${ROMAN}\\.?$`, 'i');
-  if (slug === 'frankenstein') return new RegExp(`^(?:LETTER|CHAPTER)\\s+(?:${ROMAN}|\\d+)\\.?$`, 'i');
+  if (slug === 'frankenstein') return new RegExp(`^(?:LETTER|CHAPTER)\\s+(?:${ROMAN}|\\d+)(?:\\.?\\s+.*|\\.?)$`, 'i');
   if (slug === 'little-brother') return /^CHAPTER\s+\d+\s*$/i;
-  return new RegExp(`^CHAPTER\\s+(?:${ROMAN}|\\d+)\\.?$`, 'i');
+  const chapter = `CHAPTER\\s+(?:${ROMAN}|\\d+)(?:\\.?\\s+.*|\\.?)`;
+  if (slug === 'a-room-with-a-view' || slug === 'the-scarlet-pimpernel') {
+    return new RegExp(`^(?:${chapter}|${ROMAN}\\.\\s+\\S.*)$`, 'i');
+  }
+  return new RegExp(`^${chapter}$`, 'i');
 }
 
 export function splitIntoChapters(slug, rawText) {

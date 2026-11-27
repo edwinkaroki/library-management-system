@@ -16,9 +16,10 @@ export default function DigitalLibraryPage() {
           <p className="digital-license"><strong>{book.license}</strong><br />{book.rights}</p>
           <div className="digital-actions">{book.reader ? <><Link className="button-dark" to={`/read/${book.slug}`}>Read in Stacks <span>→</span></Link><a className="text-link" href={`${(import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '')}/digital-library/${book.slug}/download`}>Download text <span>↓</span></a></> : <><a className="button-dark" href={book.readerUrl} target="_blank" rel="noreferrer">Read online <span>↗</span></a><a className="text-link" href={book.source} target="_blank" rel="noreferrer">Official downloads <span>↗</span></a></>}</div>
           <a className="source-note" href={book.source} target="_blank" rel="noreferrer">Edition and rights source ↗</a>
+          {book.standardEbooksSource && <a className="source-note" href={book.standardEbooksSource} target="_blank" rel="noreferrer">Standard Ebooks edition ↗</a>}
         </div>
       </article>)}
     </div>
-    <p className="digital-library-note">Rights statements describe these specific editions and may differ by country. The three Creative Commons titles are licensed for noncommercial sharing under their stated terms.</p>
+    <p className="digital-library-note">Project Gutenberg editions are marked public domain in the United States; copyright terms may differ by country. The Creative Commons titles are licensed for noncommercial sharing under their stated terms.</p>
   </section>;
 }

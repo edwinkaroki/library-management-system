@@ -3,14 +3,23 @@ import { useEffect, useState } from 'react';
 import { useReadingList } from '../context/ReadingListContext.jsx';
 import { useTheme } from '../context/ThemeContext.jsx';
 
+function readAuthState() {
+  const signedIn = Boolean(localStorage.getItem('token') || localStorage.getItem('accessToken'));
+  let user = null;
+  try { user = JSON.parse(localStorage.getItem('stacks-user') || 'null'); } catch { /* Ignore stale local profile data. */ }
+  const name = typeof user?.name === 'string' ? user.name.trim().split(/\s+/)[0] : '';
+  const emailName = typeof user?.email === 'string' ? user.email.split('@')[0].split(/[._-]/)[0] : '';
+  return { signedIn, firstName: name || emailName || 'reader' };
+}
+
 export default function Navbar() {
   const { count } = useReadingList();
   const { isDark, toggleTheme } = useTheme();
-  const [signedIn, setSignedIn] = useState(() => Boolean(localStorage.getItem('token') || localStorage.getItem('accessToken')));
+  const [auth, setAuth] = useState(readAuthState);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const update = () => setSignedIn(Boolean(localStorage.getItem('token') || localStorage.getItem('accessToken')));
+    const update = () => setAuth(readAuthState());
     window.addEventListener('storage', update);
     window.addEventListener('stacks-auth-changed', update);
     return () => {
@@ -33,16 +42,14 @@ export default function Navbar() {
         <span className="brand-mark">S</span>
         <span>stacks<span className="brand-period">.</span></span>
       </Link>
-      <span className="header-note">A library for curious minds</span>
+      <span className={`header-note ${auth.signedIn ? 'is-greeting' : ''}`}>{auth.signedIn ? `Hey, ${auth.firstName}! 👋` : 'A library for curious minds'}</span>
       <nav className="site-nav" aria-label="Main navigation">
         <NavLink to="/" end>Catalog</NavLink>
-        <NavLink to="/digital-library">Read online</NavLink>
         <NavLink to="/my-reading">My reading</NavLink>
-        <NavLink to="/spaces/book">Book a space</NavLink>
         <Link className="reading-count" to="/reading-list">
           Reading list <span>{count}</span>
         </Link>
-        {signedIn ? (
+        {auth.signedIn ? (
           <button className="nav-auth-button" onClick={signOut}>Sign out</button>
         ) : (
           <NavLink to="/login">Sign in</NavLink>

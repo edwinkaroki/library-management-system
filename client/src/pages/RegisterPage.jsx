@@ -13,7 +13,7 @@ export default function RegisterPage() {
   async function submit(event) {
     event.preventDefault(); setError(''); setSubmitting(true);
     try {
-      const result = await apiRequest('/auth/register', { method: 'POST', body: form });
+      const result = await apiRequest('/auth/register', { method: 'POST', body: { ...form, name: form.name.trim() } });
       const token = result.accessToken || result.access_token || result.token;
       if (!token) throw new Error('The server did not return an access token.');
       localStorage.setItem('token', token);
@@ -24,5 +24,5 @@ export default function RegisterPage() {
     } catch (cause) { setError(cause.message || 'Could not create your account. Please try again.'); }
     finally { setSubmitting(false); }
   }
-  return <AuthShell eyebrow="JOIN THE READING ROOM" title="A little more room for stories."><form className="auth-form" onSubmit={submit}><label>Your name<input name="name" type="text" autoComplete="name" value={form.name} onChange={update} placeholder="How should we call you?" /></label><label>Email address<input name="email" type="email" autoComplete="email" required value={form.email} onChange={update} placeholder="you@example.com" /></label><label>Password<input name="password" type="password" autoComplete="new-password" minLength={6} required value={form.password} onChange={update} placeholder="At least 6 characters" /></label>{error && <p className="form-error" role="alert">{error}</p>}<button className="button-dark auth-submit" disabled={submitting}>{submitting ? 'Creating account…' : 'Create account'} <span>→</span></button></form><p className="auth-switch">Already have an account? <Link to="/login">Sign in</Link></p></AuthShell>;
+  return <AuthShell eyebrow="JOIN THE READING ROOM" title="A little more room for stories."><form className="auth-form" onSubmit={submit}><label>First name<input name="name" type="text" autoComplete="given-name" required value={form.name} onChange={update} placeholder="What should we call you?" /></label><label>Email address<input name="email" type="email" autoComplete="email" required value={form.email} onChange={update} placeholder="you@example.com" /></label><label>Password<input name="password" type="password" autoComplete="new-password" minLength={6} required value={form.password} onChange={update} placeholder="At least 6 characters" /></label>{error && <p className="form-error" role="alert">{error}</p>}<button className="button-dark auth-submit" disabled={submitting}>{submitting ? 'Creating account…' : 'Create account'} <span>→</span></button></form><p className="auth-switch">Already have an account? <Link to="/login">Sign in</Link></p></AuthShell>;
 }

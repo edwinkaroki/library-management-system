@@ -8,34 +8,67 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 
+function gutenbergSources(bookId: number): string[] {
+  const digits = String(bookId);
+  const archivePath = [...digits.slice(0, -1), digits].join('/');
+  return [
+    `https://gutenberg.pglaf.org/cache/epub/${bookId}/pg${bookId}.txt`,
+    `https://mirror.fi.ossplanet.net/gutenberg/${archivePath}/${bookId}-0.txt`,
+  ];
+}
+
 const editions: Record<string, { title: string; sources: string[] }> = {
   'pride-and-prejudice': {
     title: 'Pride and Prejudice',
-    sources: [
-      'https://gutenberg.pglaf.org/cache/epub/1342/pg1342.txt',
-      'https://mirror.fi.ossplanet.net/gutenberg/1/3/4/1342/1342-0.txt',
-    ],
+    sources: gutenbergSources(1342),
+  },
+  'the-blue-castle': {
+    title: 'The Blue Castle',
+    sources: gutenbergSources(67979),
+  },
+  persuasion: {
+    title: 'Persuasion',
+    sources: gutenbergSources(105),
+  },
+  'north-and-south': {
+    title: 'North and South',
+    sources: gutenbergSources(4276),
+  },
+  'jane-eyre': {
+    title: 'Jane Eyre',
+    sources: gutenbergSources(1260),
+  },
+  'wuthering-heights': {
+    title: 'Wuthering Heights',
+    sources: gutenbergSources(768),
+  },
+  'the-scarlet-pimpernel': {
+    title: 'The Scarlet Pimpernel',
+    sources: gutenbergSources(60),
+  },
+  'a-room-with-a-view': {
+    title: 'A Room with a View',
+    sources: gutenbergSources(2641),
+  },
+  'sense-and-sensibility': {
+    title: 'Sense and Sensibility',
+    sources: gutenbergSources(161),
+  },
+  'little-women': {
+    title: 'Little Women',
+    sources: gutenbergSources(514),
   },
   frankenstein: {
     title: 'Frankenstein',
-    sources: [
-      'https://gutenberg.pglaf.org/cache/epub/84/pg84.txt',
-      'https://mirror.fi.ossplanet.net/gutenberg/8/84/84-0.txt',
-    ],
+    sources: gutenbergSources(84),
   },
   'the-great-gatsby': {
     title: 'The Great Gatsby',
-    sources: [
-      'https://gutenberg.pglaf.org/cache/epub/64317/pg64317.txt',
-      'https://mirror.fi.ossplanet.net/gutenberg/6/4/3/1/64317/64317-0.txt',
-    ],
+    sources: gutenbergSources(64317),
   },
   meditations: {
     title: 'Meditations (George Long translation)',
-    sources: [
-      'https://gutenberg.pglaf.org/cache/epub/6920/pg6920.txt',
-      'https://mirror.fi.ossplanet.net/gutenberg/6/9/2/6920/6920-0.txt',
-    ],
+    sources: gutenbergSources(6920),
   },
   'little-brother': {
     title: 'Little Brother',
