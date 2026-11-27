@@ -2,7 +2,8 @@
   "name": "library-management-system",
   "private": true,
   "scripts": {
-    "start:dev": "concurrently -k -n API,WEB \"npm --prefix api run start:dev\" \"npm --prefix client run dev -- --host 0.0.0.0\"",
+    "dev": "npm --prefix client run dev",
+    "start:dev": "npm --prefix api run start:dev",
     "start": "npm --prefix api run start",
     "build": "npm --prefix api run build",
     "test": "npm --prefix api run test",

@@ -19,7 +19,16 @@ export default function LoginPage() {
       localStorage.setItem('accessToken', token);
       if (result.user) localStorage.setItem('stacks-user', JSON.stringify(result.user));
       window.dispatchEvent(new Event('stacks-auth-changed'));
-      navigate(location.state?.from?.pathname || '/spaces/book', { replace: true });
+      const requestedPath = location.state?.from?.pathname;
+      if (requestedPath) navigate(requestedPath, { replace: true });
+      else {
+        let resumePath = '/digital-library';
+        try {
+          const latest = await apiRequest('/reading-progress/latest', { token });
+          if (latest?.progress?.bookSlug) resumePath = `/read/${latest.progress.bookSlug}`;
+        } catch { /* A saved reading place is optional after sign-in. */ }
+        navigate(resumePath, { replace: true });
+      }
     } catch (cause) { setError(cause.message || 'Could not sign in. Please try again.'); }
     finally { setSubmitting(false); }
   }

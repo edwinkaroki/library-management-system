@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import { BorrowRequestsModule } from './borrow-requests/borrow-requests.module.js';
 import { BookingsModule } from './bookings/bookings.module.js';
+import { DigitalLibraryModule } from './digital-library/digital-library.module.js';
+import { ReadingProgressModule } from './reading-progress/reading-progress.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -29,6 +31,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     UsersModule,
     BorrowRequestsModule,
     BookingsModule,
+    DigitalLibraryModule,
+    ReadingProgressModule,
   ],
   controllers: [AppController],
   providers: [AppService],

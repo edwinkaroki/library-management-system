@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { apiRequest } from '../api.js';
 import { AuthShell } from './LoginPage.jsx';
 
@@ -8,6 +8,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   function update(event) { setForm((current) => ({ ...current, [event.target.name]: event.target.value })); }
   async function submit(event) {
     event.preventDefault(); setError(''); setSubmitting(true);
@@ -19,7 +20,7 @@ export default function RegisterPage() {
       localStorage.setItem('accessToken', token);
       if (result.user) localStorage.setItem('stacks-user', JSON.stringify(result.user));
       window.dispatchEvent(new Event('stacks-auth-changed'));
-      navigate('/spaces/book', { replace: true });
+      navigate(location.state?.from?.pathname || '/digital-library', { replace: true });
     } catch (cause) { setError(cause.message || 'Could not create your account. Please try again.'); }
     finally { setSubmitting(false); }
   }
